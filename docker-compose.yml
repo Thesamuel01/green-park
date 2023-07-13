@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  api:
+    build: 
+      context: .
+      target: production
+    container_name: green_park
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.21
+    container_name: green_park_db
+    ports:
+      - 4001:3306
+    restart: always
+    environment:
+      MYSQL_USER_FILE: /run/secrets/db_user
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - db_user
+      - db_password
+      - db_root_password
+
+secrets:
+  db_user:
+    file: secrets/development/db_user.txt
+
+  db_password:
+    file: secrets/development/db_password.txt
+
+  db_root_password:
+    file: secrets/development/db_root_password.txt
+
+networks:
+  default:
+    name: green_park_network
