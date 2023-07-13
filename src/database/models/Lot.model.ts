@@ -1,9 +1,17 @@
-import { Column, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import {
+  Column,
+  HasMany,
+  Model,
+  PrimaryKey,
+  Table
+} from 'sequelize-typescript';
+import Bill from './Bill.model';
 
 @Table({
   modelName: 'lot',
   tableName: 'lots',
-  underscored: true
+  underscored: true,
+  timestamps: true
 })
 class Lot extends Model {
   @PrimaryKey
@@ -15,6 +23,9 @@ class Lot extends Model {
 
   @Column
   active!: boolean;
+
+  @HasMany(() => Bill)
+  bills!: Bill[];
 }
 
 export default Lot;
