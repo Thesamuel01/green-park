@@ -22,6 +22,5 @@ const config: SequelizeOptions = {
   logging: false,
   models: [path.join(__dirname, '/**/*.model.ts')]
 };
-console.log(config);
 
 module.exports = config;
