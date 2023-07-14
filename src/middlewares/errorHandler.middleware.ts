@@ -2,11 +2,12 @@ import {
   type Express,
   type Request,
   type Response,
-  type NextFunction
+  type NextFunction,
+  type Router
 } from 'express';
 import { HttpError } from '../helpers';
 
-export const errorHandler = (app: Express): void => {
+export const errorHandler = (app: Express | Router): void => {
   app.use(
     (
       err: HttpError | Error,

@@ -1,7 +1,7 @@
-import { type Express } from 'express';
+import { type Router, type Express } from 'express';
 import multer from 'multer';
 
-export const appendFile = (app: Express): void => {
+export const appendFile = (app: Express | Router): void => {
   const upload: multer.Multer = multer({
     storage: multer.memoryStorage()
   });
