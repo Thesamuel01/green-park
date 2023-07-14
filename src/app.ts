@@ -1,13 +1,10 @@
 import express, { Router } from 'express';
 import { readdirSync } from 'fs';
 import path from 'path';
-import {
-  allowCors,
-  appendLogger,
-  bodyParse,
-  errorHandler
-} from './middlewares';
+import { allowCors, bodyParse, errorHandler } from './middlewares';
 import 'express-async-errors';
+import { logger } from './adapters/pino';
+import sequelize from './database/models';
 
 class App {
   private readonly app: express.Express;
@@ -17,23 +14,39 @@ class App {
     this.setup();
     this.routing();
     this.setupErrorHandler();
+    void this.syncModels();
+  }
+
+  private async syncModels(): Promise<void> {
+    try {
+      await sequelize.sync({ force: false });
+      logger.info('Models synchronized with the database.');
+    } catch (error) {
+      logger.error('Error synchronizing models:', error);
+    }
   }
 
   private setup(): void {
     allowCors(this.app);
     bodyParse(this.app);
-    appendLogger(this.app);
   }
 
   private routing(): void {
-    const router = Router();
+    const mainRouter = Router();
     const routesDir = path.join(__dirname, 'api', 'routes');
 
-    this.app.use('api', router);
+    this.app.use('/api', mainRouter);
 
     try {
       readdirSync(routesDir).map(async (file) => {
-        (await import(path.join(routesDir, file))).default(router);
+        if (file.includes('.routes.')) {
+          const router = Router();
+          const [route] = file.split('.');
+
+          mainRouter.use(`/${route}`, router);
+
+          (await import(path.join(routesDir, file))).default.default(router);
+        }
       });
     } catch (error: Error | unknown) {
       if (error instanceof Error) {
@@ -51,7 +64,7 @@ class App {
 
   public start(PORT: number | string): void {
     this.app.listen(PORT, () => {
-      console.log(`Server running on port: ${PORT}`);
+      logger.info(`Server running on port: ${PORT}`);
     });
   }
 }
