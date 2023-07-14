@@ -1,4 +1,3 @@
-import path from 'path';
 import 'dotenv/config';
 import { type SequelizeOptions } from 'sequelize-typescript';
 
@@ -19,8 +18,7 @@ const config: SequelizeOptions = {
   dialectOptions: {
     timezone: 'Z'
   },
-  logging: false,
-  models: [path.join(__dirname, '/**/*.model.ts')]
+  logging: false
 };
 
 module.exports = config;

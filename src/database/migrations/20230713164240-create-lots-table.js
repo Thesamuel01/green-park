@@ -17,12 +17,12 @@ module.exports = {
           type: Sequelize.BOOLEAN,
           allowNull: false
         },
-        createdAt: {
+        created_At: {
           allowNull: false,
           type: Sequelize.DATE,
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
         },
-        updatedAt: {
+        updated_At: {
           allowNull: false,
           type: Sequelize.DATE,
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')

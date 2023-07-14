@@ -1,42 +1,49 @@
 import {
+  AllowNull,
+  AutoIncrement,
   BelongsTo,
   Column,
+  DataType,
   ForeignKey,
   Model,
   PrimaryKey,
   Table
 } from 'sequelize-typescript';
-import Lot from './Lot.model';
+import { Lot } from './Lot.model';
 
 @Table({
   modelName: 'bill',
   tableName: 'bills',
-  underscored: true,
-  timestamps: true
+  underscored: true
 })
-class Bill extends Model {
+export class Bill extends Model {
   @PrimaryKey
+  @AutoIncrement
+  @AllowNull(false)
   @Column
   id!: number;
 
+  @AllowNull(false)
   @Column
   recipientName!: string;
 
+  @AllowNull(false)
   @ForeignKey(() => Lot)
   @Column
-  lotId!: boolean;
+  lotId!: number;
 
   @BelongsTo(() => Lot)
   lot!: Lot;
 
-  @Column
+  @AllowNull(false)
+  @Column(DataType.DECIMAL(10, 2))
   value!: number;
 
+  @AllowNull(false)
   @Column
   barcode!: string;
 
+  @AllowNull(false)
   @Column
   active!: boolean;
 }
-
-export default Bill;
