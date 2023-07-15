@@ -1,28 +1,14 @@
+import { type BillDTO, type FileDTO, type BillFileDTO } from '../dtos';
 import {
-  type BillDTO,
-  type LotDTO,
-  type FileDTO,
-  type LotAttrDTO,
-  type BillAttrDTO,
-  type BillFileDTO
-} from '../dtos';
-import { type Repository, type Keys } from '../repositories';
+  type BillRepositoryInterface,
+  type LotRepositoryInterface
+} from '../repositories';
 import { type Logger, type CsvReader } from '../adapters';
-import type { Bill } from '../database/models/Bill.model';
-import type { Lot } from '../database/models/Lot.model';
 
 export class ProcessCSVService {
   constructor(
-    private readonly lotRepository: Repository<
-      LotAttrDTO,
-      LotDTO,
-      Keys<Lot, LotAttrDTO>
-    >,
-    private readonly billRepository: Repository<
-      BillAttrDTO,
-      BillDTO,
-      Keys<Bill, BillAttrDTO>
-    >,
+    private readonly lotRepository: LotRepositoryInterface,
+    private readonly billRepository: BillRepositoryInterface,
     private readonly csvReaderAdapter: CsvReader
   ) {}
 
@@ -43,13 +29,17 @@ export class ProcessCSVService {
           const { id } = isValidLot;
           // eslint-disable-next-line @typescript-eslint/naming-convention
           const { nome, valor, linha_digitavel } = billData;
-          const bill = await this.billRepository.create({
+          const insertData = {
             lotId: id,
             recipientName: nome,
             value: Number(valor),
             barcode: linha_digitavel,
             active: true
-          });
+          };
+
+          logger.info('Inserting data', JSON.stringify(insertData));
+
+          const bill = await this.billRepository.create(insertData);
 
           result.push({
             active: bill.active,
