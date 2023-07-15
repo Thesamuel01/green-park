@@ -1,34 +1,10 @@
-import { type BillAttrDTO, type BillDTO } from '../../dtos';
+import { type BillFilterDTO, type BillAttrDTO, type BillDTO } from '../../dtos';
 import { type BillRepositoryInterface } from '..';
 import { Bill } from '../../database/models/Bill.model';
-import { type WhereOptions, Op } from 'sequelize';
+import { Op, type WhereAttributeHash } from 'sequelize';
 
 export class SequelizeBillRepository implements BillRepositoryInterface {
   constructor(private readonly BillModel = Bill) {}
-  async findByParams(params: Partial<BillAttrDTO>): Promise<BillDTO[]> {
-    const whereConditions: WhereOptions = {};
-
-    for (const key in params) {
-      if (Object.prototype.hasOwnProperty.call(params, key)) {
-        const value = params[key as keyof BillAttrDTO];
-
-        if (key === 'valor_inicial') {
-          whereConditions.valor = {
-            [Op.gte]: value
-          };
-        } else if (key === 'valor_final') {
-          whereConditions.valor = {
-            ...whereConditions.valor,
-            [Op.lte]: value
-          };
-        } else {
-          whereConditions[key] = value;
-        }
-      }
-    }
-
-    return await this.BillModel.findAll({ where: whereConditions });
-  }
 
   async create(data: BillAttrDTO): Promise<BillDTO> {
     const { active, recipientName, lotId, value, barcode } = data;
@@ -67,5 +43,31 @@ export class SequelizeBillRepository implements BillRepositoryInterface {
     value: string | number | boolean
   ): Promise<BillDTO | null> {
     return await this.BillModel.findOne({ where: { [key]: value } });
+  }
+
+  async filterBills(filters: BillFilterDTO): Promise<BillDTO[]> {
+    const where: WhereAttributeHash = {};
+
+    if (filters.name != null) {
+      where.recipientName = { [Op.like]: `%${filters.name}%` }; // Usar operador LIKE para correspondência case-insensitive
+    }
+
+    if (filters.minAmount != null) {
+      where.value = { [Op.gte]: filters.minAmount };
+    }
+
+    if (filters.maxAmount != null) {
+      where.value = { ...where.value, [Op.lt]: filters.maxAmount };
+    }
+
+    if (filters.lotId != null) {
+      where.lotId = filters.lotId;
+    }
+
+    if (Object.keys(where).length === 0) {
+      return await Bill.findAll();
+    }
+
+    return await Bill.findAll({ where });
   }
 }

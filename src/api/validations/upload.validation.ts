@@ -34,3 +34,14 @@ export const ProcessPdfValidation = {
     .unknown(true)
     .required()
 };
+
+export const GetReportValidation = {
+  query: Joi.object()
+    .keys({
+      name: Joi.string(),
+      min_amount: Joi.string(),
+      max_amount: Joi.string(),
+      lot_id: Joi.string()
+    })
+    .unknown(true)
+};

@@ -8,6 +8,7 @@ export const adaptRouter = (controler: Controller) => {
       logger.appendLooger(req, res);
 
       const httpRequest: HttpRequest = {
+        query: req.query,
         body: req.body,
         file: req.file,
         logger

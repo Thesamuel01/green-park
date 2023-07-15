@@ -17,6 +17,7 @@ export interface HttpFile {
 }
 
 export interface Request {
+  query?: unknown;
   body: unknown;
   file?: HttpFile | undefined;
   logger: Logger;
