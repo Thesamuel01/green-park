@@ -4,10 +4,10 @@ import {
   type Request,
   type Response
 } from '../../helpers';
-import { type ProcessCSVService } from '../../services';
+import { type ProcessPdfService } from '../../services';
 
-export class ProcessCsvController {
-  constructor(private readonly processCsvService: ProcessCSVService) {}
+export class ProcessPdfController {
+  constructor(private readonly processPdfService: ProcessPdfService) {}
 
   async handle(req: Request): Promise<Response> {
     const { logger, file } = req;
@@ -16,7 +16,7 @@ export class ProcessCsvController {
       throw HttpError.badRequest('File was not received');
     }
 
-    const response = await this.processCsvService.handle(logger, file);
+    const response = await this.processPdfService.handle(logger, file);
 
     return HttpResponse.created(response);
   }
