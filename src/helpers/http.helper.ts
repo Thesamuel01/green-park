@@ -1,5 +1,9 @@
 import { type Logger } from '../adapters';
 
+export interface Controller {
+  handle: (req: Request) => Promise<Response>;
+}
+
 export interface Response {
   statusCode: number;
   body: unknown;
@@ -49,6 +53,10 @@ export class HttpResponse implements Response {
 
   static ok(body: unknown): HttpResponse {
     return new HttpResponse(statusCodes.OK, body);
+  }
+
+  static created(body: unknown): HttpResponse {
+    return new HttpResponse(statusCodes.CREATED, body);
   }
 }
 

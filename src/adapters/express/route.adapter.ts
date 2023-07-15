@@ -1,9 +1,8 @@
 import { type NextFunction, type Request, type Response } from 'express';
-import { type ProcessCsvController } from '../../api/controllers/processCsv.controller';
-import { type Request as HttpRequest } from '../../helpers';
+import { type Controller, type Request as HttpRequest } from '../../helpers';
 import { logger } from '../../app';
 
-export const adaptRouter = (controler: ProcessCsvController) => {
+export const adaptRouter = (controler: Controller) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       logger.appendLooger(req, res);

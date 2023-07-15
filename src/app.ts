@@ -1,8 +1,9 @@
 import express, { Router } from 'express';
 import { readdirSync } from 'fs';
 import path from 'path';
-import { allowCors, bodyParse, errorHandler } from './middlewares';
 import 'express-async-errors';
+
+import { allowCors, bodyParse, errorHandler } from './middlewares';
 import { PinoLogger } from './adapters/pino';
 import sequelize from './database/models';
 

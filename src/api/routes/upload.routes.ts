@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { type Router } from 'express';
 import { adaptRouter } from '../../adapters/express/route.adapter';
-import { makeProcessCsvController } from '../../factories';
+import {
+  makeProcessCsvController,
+  makeProcessPdfController
+} from '../../factories';
 import { appendFile } from '../../middlewares';
 import { reqValidation } from '../../adapters/express/reqValidation.adapter';
-import { ProcessCsvValidation } from '../validations';
+import { ProcessCsvValidation, ProcessPdfValidation } from '../validations';
 
 export default (router: Router): void => {
   appendFile(router);
@@ -13,5 +16,11 @@ export default (router: Router): void => {
     '/csv',
     reqValidation(ProcessCsvValidation),
     adaptRouter(makeProcessCsvController())
+  );
+
+  router.post(
+    '/pdf',
+    reqValidation(ProcessPdfValidation),
+    adaptRouter(makeProcessPdfController())
   );
 };

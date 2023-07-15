@@ -18,3 +18,19 @@ export const ProcessCsvValidation = {
     .unknown(true)
     .required()
 };
+
+export const ProcessPdfValidation = {
+  file: Joi.object()
+    .keys({
+      buffer: Joi.binary().max(MAX_SIZE).required(),
+      mimetype: Joi.string().valid('application/pdf').required(),
+      fileName: Joi.string().pattern(fileNameRegex).optional(),
+      size: Joi.number()
+        .messages({
+          'number.max': 'Size exceeds the maximum allowed value of 10MB'
+        })
+        .required()
+    })
+    .unknown(true)
+    .required()
+};
