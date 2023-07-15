@@ -42,5 +42,3 @@ export class PinoLogger implements Logger {
     console.log(data);
   }
 }
-
-export const logger = new PinoLogger();

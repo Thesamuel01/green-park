@@ -6,19 +6,19 @@ import {
   type Router
 } from 'express';
 import { HttpError } from '../helpers';
+import { logger } from '../app';
 
 export const errorHandler = (app: Express | Router): void => {
   app.use(
     (
       err: HttpError | Error,
-      req: Request,
+      _req: Request,
       res: Response,
       _next: NextFunction
     ): Response => {
-      const { log } = req;
       const { name, message } = err;
 
-      log.error({ name, message });
+      logger.error({ name, message });
 
       if (err instanceof HttpError) {
         const { statusCode } = err;

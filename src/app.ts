@@ -3,8 +3,10 @@ import { readdirSync } from 'fs';
 import path from 'path';
 import { allowCors, bodyParse, errorHandler } from './middlewares';
 import 'express-async-errors';
-import { logger } from './adapters/pino';
+import { PinoLogger } from './adapters/pino';
 import sequelize from './database/models';
+
+export const logger = new PinoLogger();
 
 class App {
   private readonly app: express.Express;
