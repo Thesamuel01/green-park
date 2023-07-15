@@ -16,6 +16,8 @@ export const adaptRouter = (controler: ProcessCsvController) => {
 
       const httpResponse = await controler.handle(httpRequest);
 
+      logger.info('Response:', JSON.stringify(httpResponse));
+
       return res.status(httpResponse.statusCode).json(httpResponse.body);
     } catch (error) {
       next(error);

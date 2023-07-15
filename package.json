@@ -4,7 +4,8 @@
   "description": "",
   "main": "build/index",
   "scripts": {
-    "dev": "npm run db:reset && nodemon --exec ts-node-esm ./src/index.ts",
+    "predev": "npm run db:reset",
+    "dev": "nodemon --exec ts-node-esm ./src/index.ts",
     "build": "rimraf ./build && tsc",
     "prestart": "npm run build && npm run db:reset",
     "start": "node .",

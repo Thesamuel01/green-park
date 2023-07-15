@@ -67,6 +67,8 @@ export class ProcessCSVService {
       })
     );
 
+    logger.info('Operação finalizada.');
+
     return result;
   }
 }

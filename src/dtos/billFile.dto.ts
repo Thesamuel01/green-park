@@ -1,6 +1,6 @@
 export interface BillFileDTO {
   nome: string;
   unidade: string;
-  valor: number;
+  valor: string;
   linha_digitavel: string;
 }
