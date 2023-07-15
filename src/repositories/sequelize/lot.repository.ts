@@ -1,12 +1,8 @@
 import { type LotDTO, type LotAttrDTO } from '../../dtos';
-import { type Repository } from '..';
+import { type LotRepositoryInterface } from '..';
 import { Lot } from '../../database/models/Lot.model';
 
-export type LotKeys = keyof Lot & keyof LotAttrDTO;
-
-export class SequelizeLotRepository
-  implements Repository<LotAttrDTO, LotDTO, LotKeys>
-{
+export class SequelizeLotRepository implements LotRepositoryInterface {
   constructor(private readonly LotModel = Lot) {}
 
   async create(data: LotAttrDTO): Promise<LotDTO> {
@@ -33,5 +29,9 @@ export class SequelizeLotRepository
     value: unknown
   ): Promise<LotDTO | null> {
     return await this.LotModel.findOne({ where: { [key]: value } });
+  }
+
+  async findByParams(params: Partial<LotAttrDTO>): Promise<LotDTO[]> {
+    return await this.LotModel.findAll({ where: params });
   }
 }

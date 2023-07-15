@@ -1,13 +1,34 @@
 import { type BillAttrDTO, type BillDTO } from '../../dtos';
-import { type Repository } from '..';
+import { type BillRepositoryInterface } from '..';
 import { Bill } from '../../database/models/Bill.model';
+import { type WhereOptions, Op } from 'sequelize';
 
-export type BillKeys = keyof Bill & keyof BillAttrDTO;
-
-export class SequelizeBillRepository
-  implements Repository<BillAttrDTO, BillDTO, BillKeys>
-{
+export class SequelizeBillRepository implements BillRepositoryInterface {
   constructor(private readonly BillModel = Bill) {}
+  async findByParams(params: Partial<BillAttrDTO>): Promise<BillDTO[]> {
+    const whereConditions: WhereOptions = {};
+
+    for (const key in params) {
+      if (Object.prototype.hasOwnProperty.call(params, key)) {
+        const value = params[key as keyof BillAttrDTO];
+
+        if (key === 'valor_inicial') {
+          whereConditions.valor = {
+            [Op.gte]: value
+          };
+        } else if (key === 'valor_final') {
+          whereConditions.valor = {
+            ...whereConditions.valor,
+            [Op.lte]: value
+          };
+        } else {
+          whereConditions[key] = value;
+        }
+      }
+    }
+
+    return await this.BillModel.findAll({ where: whereConditions });
+  }
 
   async create(data: BillAttrDTO): Promise<BillDTO> {
     const { active, recipientName, lotId, value, barcode } = data;
