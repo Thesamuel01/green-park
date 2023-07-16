@@ -9,7 +9,8 @@
     "build": "rimraf ./build && tsc",
     "prestart": "npm run build && npm run db:reset",
     "start": "node .",
-    "db:reset": "npm run build && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "predb:reset": "npm run build",
+    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
