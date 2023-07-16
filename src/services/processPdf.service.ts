@@ -38,6 +38,9 @@ export class ProcessPdfService {
         }
       })
     );
+    dataSorted.sort((a, b) =>
+      a?.lotId !== undefined && b?.lotId !== undefined ? a.lotId - b.lotId : 0
+    );
 
     await Promise.all(
       dataSorted.map(async (billData) => {
@@ -91,6 +94,6 @@ export class ProcessPdfService {
 
     logger.info('Operação finalizada.');
 
-    return result;
+    return result.sort((a, b) => a.lotId - b.lotId);
   }
 }

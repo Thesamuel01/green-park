@@ -59,6 +59,6 @@ export class ProcessCSVService {
 
     logger.info('Operação finalizada.');
 
-    return result;
+    return result.sort((a, b) => a.lotId - b.lotId);
   }
 }

@@ -30,7 +30,7 @@ export default (router: Router): void => {
   );
 
   router.get(
-    '/report',
+    '/',
     reqValidation(GetReportValidation),
     adaptRouter(makeGetReport())
   );

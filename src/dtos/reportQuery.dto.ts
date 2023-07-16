@@ -3,4 +3,5 @@ export interface ReportQueryDTO {
   minAmount?: string;
   maxAmount?: string;
   lotId?: string;
+  report?: string;
 }
