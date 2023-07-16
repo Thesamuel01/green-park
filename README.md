@@ -31,12 +31,43 @@ As an employee of the company responsible for the gate access app, your task is 
 
 To run the application the following environment variables are required:
 
-- `NODE_PORT`: Port for the Node.js server
-- `DB_USER`: Username for the MySQL database
-- `DB_PASSWORD`: Password for the MySQL database
-- `DB_NAME`: Name of the MySQL database
-- `DB_PORT`: Port for the MySQL database
-- `DB_HOST`: Hostname for the MySQL database
+- `MYSQL_EXT_PORT`: Port for external connections to the MySQL server.
+
+- `MYSQL_ROOT_PASSWORD`: Password for the MySQL root user.
+
+- `MYSQL_ROOT_HOST`: Environment variable that allows specifying which IP addresses are allowed to connect to the database. Set it to '%' to allow connections from any IP address.
+
+- `NODE_PORT`: Port on which the Node.js server will listen.
+
+- `DB_USER`: Username for the MySQL database.
+
+- `DB_PASSWORD`: Password for the MySQL database.
+
+- `DB_NAME`: Name of the MySQL database.
+
+- `DB_PORT`: Port for the MySQL database.
+
+- `DB_HOST`: Hostname or IP address of the MySQL database server.
+
+Please make sure to provide the appropriate values for these environment variables in your `.env` file or when running your application.
+
+
+Example
+```env
+# Database Env
+MYSQL_EXT_PORT=4001
+MYSQL_ROOT_PASSWORD=my_secret_root_passw
+MYSQL_ROOT_HOST='%'
+
+# Node Env
+NODE_PORT=4000
+DB_USER=root
+DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+DB_NAME=green_park
+DB_PORT=3306
+DB_HOST=db
+
+```
 
 ## Commands
 
@@ -57,15 +88,13 @@ npm run dev
 
 To run the application with Docker, use the following commands:
 
-- Development mode:
+- Start:
 ```
-docker-compose -f docker-compose.dev.yml up -d
-```
-
-- Production mode:
-(Before starting the Docker container in production mode, create a "secrets" directory at the root of the project containing the following files: `db_password.txt`, `db_root_password.txt`, `db_user.txt` with their respective values.)
-```
-docker-compose -f docker-compose.yml up -d
+docker compose -f docker-compose.dev.yml up -d
 ```
 
-**Please make sure you have a local instance of MySQL set up and running when running the application without Docker.**
+- Stop:
+```
+docker compose -f docker-compose.dev.yml down
+```
+
